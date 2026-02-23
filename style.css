@@ -2,13 +2,25 @@
     display: grid;
     /* Vytvoříme 8 sloupce pro náš vzor */
     grid-template-columns: repeat(8, 100px);
-    gap: 5px;
+    gap: 1px;
     background-color: #333;
     width: fit-content;
     padding: 5px;
-    margin: 20px auto;
+    margin: 15px auto;
 }
-
+h1 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0px;
+}
+h2 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #535353;
+    margin: -8px 0px 15px 0px;
+    font-size: 1.2rem;
+}
 .cell_white {
     width: 100px;
     height: 100px;
@@ -25,7 +37,7 @@
 .cell_black {
     width: 100px;
     height: 100px;
-    background-color: black;
+    background-color: #333;
     color: white;
     display: flex;
     justify-content: center;
