@@ -1,43 +1,39 @@
+body {
+    background-color: #333;
+}
 #game-board {
     display: grid;
     /* Vytvoříme 8 sloupce pro náš vzor */
-    grid-template-columns: repeat(8, 100px);
-    gap: 1px;
-    background-color: #333;
+    grid-template-columns: repeat(10, 60px);
     width: fit-content;
-    padding: 5px;
-    margin: 15px auto;
+    margin: 0 auto;
+    padding: 5px 7px 5px 5px;
+    border: 1px solid white;
 }
 h1 {
     text-align: center;
     font-family: 'Arial', sans-serif;
-    color: #333;
+    color: white;
     margin: 0px;
 }
 h2 {
     text-align: center;
     font-family: 'Arial', sans-serif;
-    color: #535353;
-    margin: -8px 0px 15px 0px;
+    color: #a8a8a8;
+    margin: -5px 0px 15px 0px;
     font-size: 1.2rem;
 }
-.cell_white {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    font-family: sans-serif;
-    font-weight: bold;
-    cursor: pointer;
+h3 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: red;
+    margin: -8px 0px 15px 0px;
+    font-size: 1.5rem;
 }
-.cell_black {
-    width: 100px;
-    height: 100px;
-    background-color: #333;
+.cell{
+    width: 60px;
+    height: 60px;
+    border: 1px solid white;
     color: white;
     display: flex;
     justify-content: center;
@@ -46,10 +42,9 @@ h2 {
     font-family: sans-serif;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.1s ease;
 }
-.cell_white:hover {
-    background-color: #f0f0f0;
-}
-.cell_black:hover {
-    background-color: #303030;
-}
+    .cell:hover {
+        background-color: rgba(255, 255, 255, 0.253);
+        transition: 0.3s ease;
+    }
