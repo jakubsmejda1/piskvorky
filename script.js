@@ -51,8 +51,70 @@ for (let r = 0; r < velikost; r++) {
 }
 
 // GLOBÁLNÍ PROMĚNNÁ, která určuje, jaký hráč je na tahu
-let aktualniHrac = "X";        // první na tahu je hráč s hracím kamenem X
+let aktualniHrac = "X";        // první na tahu je hráč s X
+let hraBezi = true;            // určuje, zda hra pokračuje
 document.getElementById("status").textContent = "Na tahu je hráč " + aktualniHrac;
+/**
+ * KONTROLA VÍTĚZNÉ ŘADY
+ * Zkontroluje, zda právě umístěný kámen vytvořil vítěznou řadu (5 kamenů v řadě)
+ */
+function kontrolaVitezne(radek, sloupec, hrac) {
+  const delkaRady = 5;
+  
+  // 1. KONTROLA VODOROVNÉHO SMĚRU (vlevo-vpravo)
+  let pocetVolevo = 0;
+  for (let s = sloupec - 1; s >= 0 && pametHry[radek][s] === hrac; s--) {
+    pocetVolevo++;
+  }
+  let pocetVpravo = 0;
+  for (let s = sloupec + 1; s < velikost && pametHry[radek][s] === hrac; s++) {
+    pocetVpravo++;
+  }
+  if (pocetVolevo + 1 + pocetVpravo >= delkaRady) {
+    return true;  // našli jsme vítěznou řadu
+  }
+  
+  // 2. KONTROLA SVISLÉHO SMĚRU (nahoru-dolů)
+  let pocetNahoru = 0;
+  for (let r = radek - 1; r >= 0 && pametHry[r][sloupec] === hrac; r--) {
+    pocetNahoru++;
+  }
+  let pocetDolu = 0;
+  for (let r = radek + 1; r < velikost && pametHry[r][sloupec] === hrac; r++) {
+    pocetDolu++;
+  }
+  if (pocetNahoru + 1 + pocetDolu >= delkaRady) {
+    return true;  // našli jsme vítěznou řadu
+  }
+  
+  // 3. KONTROLA DIAGONÁLY (↖↘)
+  let pocetLevohoreNa = 0;
+  for (let i = 1; radek - i >= 0 && sloupec - i >= 0 && pametHry[radek - i][sloupec - i] === hrac; i++) {
+    pocetLevohoreNa++;
+  }
+  let pocetPravodolenaMa = 0;
+  for (let i = 1; radek + i < velikost && sloupec + i < velikost && pametHry[radek + i][sloupec + i] === hrac; i++) {
+    pocetPravodolenaMa++;
+  }
+  if (pocetLevohoreNa + 1 + pocetPravodolenaMa >= delkaRady) {
+    return true;  // našli jsme vítěznou řadu
+  }
+  
+  // 4. KONTROLA DIAGONÁLY (↙↗)
+  let pocetLevodolenaMa = 0;
+  for (let i = 1; radek + i < velikost && sloupec - i >= 0 && pametHry[radek + i][sloupec - i] === hrac; i++) {
+    pocetLevodolenaMa++;
+  }
+  let pocetPravohoreNa = 0;
+  for (let i = 1; radek - i >= 0 && sloupec + i < velikost && pametHry[radek - i][sloupec + i] === hrac; i++) {
+    pocetPravohoreNa++;
+  }
+  if (pocetLevodolenaMa + 1 + pocetPravohoreNa >= delkaRady) {
+    return true;  // našli jsme vítěznou řadu
+  }
+  
+  return false;  // žádná vítězná řada nebyla nalezena
+}
 /**
 * VYKRESLENÍ HRACÍ PLOCHY
 */
@@ -68,22 +130,31 @@ for (let r = 0; r < velikost; r++) {
      // 3. FUNKCE PRVKU - přidání událostní funkce, která zajistí, že při kliknutí na něj bude vykreslen hrací kámen, a že se to poznamená do hrací paměti
     //                   Hrací kámen ale zapíšeme jen tehdy, pokud je v paměti na daných souřadnicích volno
     policko.onclick = function() {
-      if (pametHry[r][s] === "") {
+      if (hraBezi && pametHry[r][s] === "") {
         // zápis do hrací paměti
         pametHry[r][s] = aktualniHrac;
         // vykreslení do políčka
         policko.textContent = aktualniHrac;
+        
+        // KONTROLA VÍTĚZNÉ ŘADY
+        if (kontrolaVitezne(r, s, aktualniHrac)) {
+          document.getElementById("status").textContent = "Vítězem je hráč " + aktualniHrac + "!";
+          document.getElementById("status").style.color = aktualniHrac === "X" ? "red" : "lightblue";
+          hraBezi = false;  // zastavíme hru
+          return;  // skončíme bez přepnutí hráče
+        }
+        
         // přepnutí výhybky na dalšího hráče (pokud je aktuální X, bude při příštím kliknutí O, a naopak)
         if (aktualniHrac === "X") {
             aktualniHrac = "O";
             policko.style.color = "lightblue";
             document.getElementById("status").textContent = "Na tahu je hráč " + aktualniHrac;
-            document.getElementById("status").style.color = "lightblue";
+            document.getElementById("status").style.color = "red";        
         } else {
             aktualniHrac = "X";
             policko.style.color = "red";
             document.getElementById("status").textContent = "Na tahu je hráč " + aktualniHrac;
-            document.getElementById("status").style.color = "red";
+            document.getElementById("status").style.color = "lightblue";
         }
       }
     };
